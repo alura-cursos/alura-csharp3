@@ -33,10 +33,7 @@ namespace UsuariosApi
         {
             services.AddDbContext<UserDbContext>(options => options.UseMySQL(Configuration.GetConnectionString("UsuarioConnection")));
             services
-                .AddIdentity<IdentityUser<int>, IdentityRole<int>>(opt =>
-                {
-                    opt.SignIn.RequireConfirmedEmail = true;
-                })
+                .AddIdentity<IdentityUser<int>, IdentityRole<int>>()
                 .AddEntityFrameworkStores<UserDbContext>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
