@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UsuariosApi.Data.Dtos.Usuario;
+using UsuariosApi.Data.Requests;
 using UsuariosApi.Models;
 
 namespace UsuariosApi.Services
@@ -29,10 +30,22 @@ namespace UsuariosApi.Services
             if (resultadoIdentity.Result.Succeeded)
             {
                 string code = _userManager.GenerateEmailConfirmationTokenAsync(usuarioIdentity).Result;
-                return Result.Ok().WithSuccess(code);
+                return Result.Ok().WithSuccess(code).WithSuccess(usuarioIdentity.Id.ToString());
             }
             return Result.Fail("Falha ao cadastrar usuário");
 
+        }
+
+        internal Result AtivaUsuario(AtivaContaRequest request)
+        {
+            var identityUser = _userManager.Users.Where(u => u.Id == request.UsuarioId).FirstOrDefault();
+            var identityResult = _userManager.ConfirmEmailAsync(identityUser, request.CodigoDeAtivacao);
+
+            if (identityResult.Result.Succeeded)
+            {
+                return Result.Ok();
+            }
+            return Result.Fail("Falha ao ativar conta de usuário");
         }
     }
 }
