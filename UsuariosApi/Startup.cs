@@ -33,7 +33,10 @@ namespace UsuariosApi
         {
             services.AddDbContext<UserDbContext>(options => options.UseMySQL(Configuration.GetConnectionString("UsuarioConnection")));
             services
-                .AddIdentity<IdentityUser<int>, IdentityRole<int>>()
+                .AddIdentity<IdentityUser<int>, IdentityRole<int>>(opt =>
+                {
+                    opt.SignIn.RequireConfirmedEmail = true;
+                })
                 .AddEntityFrameworkStores<UserDbContext>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -44,6 +47,7 @@ namespace UsuariosApi
             services.AddScoped<CadastroService, CadastroService>();
             services.AddScoped<TokenService, TokenService>();
             services.AddScoped<LoginService, LoginService>();
+            services.AddScoped<LogoutService, LogoutService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
