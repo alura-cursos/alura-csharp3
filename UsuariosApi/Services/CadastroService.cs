@@ -30,7 +30,7 @@ namespace UsuariosApi.Services
             if (resultadoIdentity.Result.Succeeded)
             {
                 string code = _userManager.GenerateEmailConfirmationTokenAsync(usuarioIdentity).Result;
-                return Result.Ok().WithSuccess(code).WithSuccess(usuarioIdentity.Id.ToString());
+                return Result.Ok().WithSuccess(code).WithSuccess(code);
             }
             return Result.Fail("Falha ao cadastrar usuário");
 
