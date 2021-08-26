@@ -41,7 +41,7 @@ namespace UsuariosApi.Services
 
         }
 
-        internal Result AtivaUsuario(AtivaContaRequest request)
+        public Result AtivaContaUsuario(AtivaContaRequest request)
         {
             var identityUser = _userManager.Users.Where(u => u.Id == request.UsuarioId).FirstOrDefault();
             var identityResult = _userManager.ConfirmEmailAsync(identityUser, request.CodigoDeAtivacao);
