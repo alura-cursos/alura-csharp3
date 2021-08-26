@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -14,33 +13,27 @@ namespace UsuariosApi.Services
 {
     public class TokenService
     {
-        readonly SecuritySettings security;
-
-        public TokenService(IOptionsMonitor<SecuritySettings> settings)
-        {
-            security = settings.CurrentValue;
-        }
-
-        public Task<Token> CreateTokenAsync(IdentityUser<int> usuario)
+        public Token CreateToken(IdentityUser<int> usuario)
         {
             Claim[] direitosUsuario = new Claim[]
             {
                 new Claim("username", usuario.UserName),
                 new Claim("id", usuario.Id.ToString())
             };
-            var chave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("0asdjas09djsa09djasdjsadajsd09asjd09sajcnzxn"));
+
+            var chave = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes("0asdjas09djsa09djasdjsadajsd09asjd09sajcnzxn")
+                );
             var credenciais = new SigningCredentials(chave, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: security.Issuer,
-                audience: security.Audience,
                 claims: direitosUsuario,
                 signingCredentials: credenciais,
-                expires: DateTime.UtcNow.AddHours(security.HoursToExpire)
-            );
+                expires: DateTime.UtcNow.AddHours(1)
+                );
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-            return Task.FromResult(new Token(tokenString));
+            return new Token(tokenString);
         }
     }
 }
