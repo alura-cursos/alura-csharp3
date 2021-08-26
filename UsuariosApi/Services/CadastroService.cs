@@ -35,7 +35,7 @@ namespace UsuariosApi.Services
                 string code = _userManager.GenerateEmailConfirmationTokenAsync(usuarioIdentity).Result;
                 string encodedCode = HttpUtility.UrlEncode(code);
                 _emailService.EnviarEmail(new[] { usuarioIdentity.Email }, "Link de ativação", usuarioIdentity.Id, encodedCode);
-                return Result.Ok().WithSuccess(code).WithSuccess(usuarioIdentity.Id.ToString());
+                return Result.Ok().WithSuccess(code).WithSuccess(code);
             }
             return Result.Fail("Falha ao cadastrar usuário");
 
